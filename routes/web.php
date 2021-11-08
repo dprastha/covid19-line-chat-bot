@@ -18,4 +18,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('linebot', [LineBotController::class, 'index']);
+Route::get('linebot', [LineBotController::class, 'webhook']);

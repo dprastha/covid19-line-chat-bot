@@ -10,3 +10,5 @@ Route::get('/get-message', function (Request $request) {
 });
 
 Route::post('/get-message', [LineBotController::class, 'getMessage']);
+
+Route::post('/webhook', [LineBotController::class, 'webhook']);

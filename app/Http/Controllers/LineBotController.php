@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Services\LineBotService;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class LineBotController extends Controller
 {
@@ -22,5 +23,10 @@ class LineBotController extends Controller
     {
         //logger("request : ", $request->all());
         $this->messageService->replySend($request->json()->all());
+    }
+
+    public function webhook(Request $request, Response $response)
+    {
+        $this->messageService->webHook($request, $response);
     }
 }
