@@ -54,7 +54,7 @@ class LineBotController extends Controller
         }
 
         // init bot
-        $httpClient = new CurlHTTPClient(env('+KLc3eFbkeHLMbaQTkME6m7gxb2To/QASocvtPUqo15MAOPn4wPCxODUcJHXUzjbrS1VVvYqLSwHn7RtaIuNrt3k75plAUU43hb5wrh7YSbXw7VsnDL6RZ1Ks7PW/pc6OesVDIECfrJWjnnbOi5gNAdB04t89/1O/w1cDnyilFU='));
+        $httpClient = new CurlHTTPClient(env('LINE_BOT_CHANNEL_ACCESS_TOKEN'));
         $bot = new LINEBot($httpClient, ['channelSecret' => env('LINE_BOT_CHANNEL_SECRET')]);
         $data = json_decode($body, true);
         foreach ($data['events'] as $event) {
