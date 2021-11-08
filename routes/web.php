@@ -21,3 +21,5 @@ Route::get('/', function () {
 Route::get('test', function () {
     return 'test';
 });
+
+Route::post('webhook', LineBotController::class, 'webhook');
