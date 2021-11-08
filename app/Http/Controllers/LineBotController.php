@@ -2,23 +2,25 @@
 
 namespace App\Http\Controllers;
 
+
+use App\Http\Services\LineBotService;
 use Illuminate\Http\Request;
 
 class LineBotController extends Controller
 {
-    public function index()
+    /**
+     * @var GetMessageService
+     */
+    private $messageService;
+
+    public function __construct(LineBotService $messageService)
     {
-        $httpClient = new \LINE\LINEBot\HTTPClient\CurlHTTPClient(env('LINE_BOT_CHANNEL_ACCESS_TOKEN'));
-        $bot = new \LINE\LINEBot($httpClient, ['channelSecret' => env('LINE_BOT_CHANNEL_SECRET')]);
-        $textMessageBuilder = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder('hello');
+        $this->messageService = $messageService;
+    }
 
-        $response = $bot->replyMessage('<reply token>', $textMessageBuilder);
-        if ($response->isSucceeded()) {
-            echo 'Succeeded!';
-            return;
-        }
-
-        // Failed
-        echo $response->getHTTPStatus() . ' ' . $response->getRawBody();
+    public function getMessage(Request $request)
+    {
+        //logger("request : ", $request->all());
+        $this->messageService->replySend($request->json()->all());
     }
 }
