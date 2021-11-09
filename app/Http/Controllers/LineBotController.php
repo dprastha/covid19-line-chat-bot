@@ -18,22 +18,6 @@ use \LINE\LINEBot\SignatureValidator as SignatureValidator;
 
 class LineBotController extends Controller
 {
-    /**
-     * @var GetMessageService
-     */
-    private $messageService;
-
-    public function __construct(LineBotService $messageService)
-    {
-        $this->messageService = $messageService;
-    }
-
-    public function getMessage(Request $request)
-    {
-        //logger("request : ", $request->all());
-        $this->messageService->replySend($request->json()->all());
-    }
-
     public function webhook(Request $request, Response $response)
     {
         // get request body and line signature header
