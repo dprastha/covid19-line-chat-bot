@@ -58,20 +58,14 @@ class LineBotController extends Controller
                 $result = $bot->replyMessage($event['replyToken'], $textMessageBuilder);
                 return $result->getHTTPStatus() . ' ' . $result->getRawBody();
             } else if (strtolower($userMessage) == 'indonesia') {
-                $results = Http::get('https://api.kawalcorona.com/indonesia')->json();
-                $message = $results[0]["name"] . "\n" . "Positif : " . $results[0]["positif"] . "\n" . "Sembuh : " . $results[0]["sembuh"] . "\n" . "Meninggal : " . $results[0]["meninggal"] . "\n" . "Dirawat : " . $results[0]["dirawat"];
-                $textMessageBuilder = new TextMessageBuilder($message);
+                $textMessageBuilder = new TextMessageBuilder($this->dataCovidService->index());
+                $result = $bot->replyMessage($event['replyToken'], $textMessageBuilder);
+                return $result->getHTTPStatus() . ' ' . $result->getRawBody();
+            } else {
+                $textMessageBuilder = new TextMessageBuilder("Command : \n - Indonesia : to get all covid data in Indonesia");
                 $result = $bot->replyMessage($event['replyToken'], $textMessageBuilder);
                 return $result->getHTTPStatus() . ' ' . $result->getRawBody();
             }
         }
-    }
-
-    public function getDataCovid()
-    {
-        $results = Http::get('https://api.kawalcorona.com/indonesia')->json();
-        $message = $results[0]["name"] . "\n" . "Positif : " . $results[0]["positif"] . "\n" . "Sembuh : " . $results[0]["sembuh"] . "\n" . "Meninggal : " . $results[0]["meninggal"] . "\n" . "Dirawat : " . $results[0]["dirawat"];
-
-        return $message;
     }
 }
