@@ -6,6 +6,7 @@ use App\Services\DataCovidService;
 use App\Services\LineBotService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Http;
 use LINE\LINEBot;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use \LINE\LINEBot\MessageBuilder\MultiMessageBuilder;
@@ -57,10 +58,8 @@ class LineBotController extends Controller
                 $result = $bot->replyMessage($event['replyToken'], $textMessageBuilder);
                 return $result->getHTTPStatus() . ' ' . $result->getRawBody();
             } else if (strtolower($userMessage) === 'Indonesia') {
-                $messages = $this->dataCovidService->index();
-                foreach ($messages as $message) {
-                }
-                $textMessageBuilder = new TextMessageBuilder($message["name"] . "\n" . "Positif : " . $message["positif"] . "\n" . "Sembuh : " . $message["sembuh"] . "\n" . "Meninggal : " . $message["meninggal"] . "\n" . "Dirawat : " . $message["dirawat"]);
+                $message = Http::get('https://api.kawalcorona.com/indonesia')->json();
+                $textMessageBuilder = new TextMessageBuilder($message[0]["name"] . "\n" . "Positif : " . $message[0]["positif"] . "\n" . "Sembuh : " . $message[0]["sembuh"] . "\n" . "Meninggal : " . $message[0]["meninggal"] . "\n" . "Dirawat : " . $message[0]["dirawat"]);
                 $result = $bot->replyMessage($event['replyToken'], $textMessageBuilder);
                 return $result->getHTTPStatus() . ' ' . $result->getRawBody();
             }
@@ -69,6 +68,8 @@ class LineBotController extends Controller
 
     public function getDataCovid()
     {
-        return $this->dataCovidService->index();
+        $results = Http::get('https://api.kawalcorona.com/indonesia')->json();
+
+        return $results[0]['name'];
     }
 }
