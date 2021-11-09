@@ -67,8 +67,8 @@ class LineBotController extends Controller
         }
     }
 
-    public function getDataCovid(DataCovidService $dataCovidService)
+    public function getDataCovid()
     {
-        return $dataCovidService->index();
+        return $this->dataCovidService->index();
     }
 }

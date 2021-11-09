@@ -9,12 +9,13 @@ class DataCovidService
     public function index()
     {
         $results = Http::get('https://api.kawalcorona.com/indonesia')->json();
-        foreach ($results as $responses) {
-            foreach ($responses as $response) {
-            }
-        }
-        dump($responses["positif"] . "\n" . "tes");
-        // $response = json_decode($result);
+        // foreach ($results as $responses) {
+        //     foreach ($responses as $response) {
+        //     }
+        // }
+        // dump($responses);
+        // // $response = json_decode($result);
+        // dd(gettype($results));
 
         return $results;
     }
