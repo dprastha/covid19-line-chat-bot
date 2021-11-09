@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Services\DataCovidService;
 use App\Services\LineBotService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -15,23 +15,15 @@ use \LINE\LINEBot\MessageBuilder\AudioMessageBuilder;
 use \LINE\LINEBot\MessageBuilder\ImageMessageBuilder;
 use \LINE\LINEBot\MessageBuilder\VideoMessageBuilder;
 use \LINE\LINEBot\SignatureValidator as SignatureValidator;
+use PhpParser\Node\Stmt\Foreach_;
 
 class LineBotController extends Controller
 {
-    /**
-     * @var GetMessageService
-     */
-    private $messageService;
+    private $dataCovidService;
 
-    public function __construct(LineBotService $messageService)
+    public function __construct(DataCovidService $dataCovidService)
     {
-        $this->messageService = $messageService;
-    }
-
-    public function getMessage(Request $request)
-    {
-        //logger("request : ", $request->all());
-        $this->messageService->replySend($request->json()->all());
+        $this->dataCovidService = $dataCovidService;
     }
 
     public function webhook(Request $request, Response $response)
@@ -64,7 +56,19 @@ class LineBotController extends Controller
                 $textMessageBuilder = new TextMessageBuilder($message);
                 $result = $bot->replyMessage($event['replyToken'], $textMessageBuilder);
                 return $result->getHTTPStatus() . ' ' . $result->getRawBody();
+            } else if (strtolower($userMessage) === 'Indonesia') {
+                $messages = $this->dataCovidService->index();
+                foreach ($messages as $message) {
+                }
+                $textMessageBuilder = new TextMessageBuilder($message["name"] . "\n" . "Positif : " . $message["positif"] . "\n" . "Sembuh : " . $message["sembuh"] . "\n" . "Meninggal : " . $message["meninggal"] . "\n" . "Dirawat : " . $message["dirawat"]);
+                $result = $bot->replyMessage($event['replyToken'], $textMessageBuilder);
+                return $result->getHTTPStatus() . ' ' . $result->getRawBody();
             }
         }
+    }
+
+    public function getDataCovid(DataCovidService $dataCovidService)
+    {
+        return $dataCovidService->index();
     }
 }
