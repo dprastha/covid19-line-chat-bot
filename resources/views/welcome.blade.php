@@ -26,6 +26,10 @@
         OneSignal.push(function() {
             OneSignal.init({
                 appId: "17d14c5e-0935-4330-b97e-eba011f1cb11",
+                autoRegister: true,
+                notifyButton: {
+                    enable: true
+                }
             });
         });
         </script>
