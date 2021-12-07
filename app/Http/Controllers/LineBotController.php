@@ -16,7 +16,7 @@ use \LINE\LINEBot\MessageBuilder\AudioMessageBuilder;
 use \LINE\LINEBot\MessageBuilder\ImageMessageBuilder;
 use \LINE\LINEBot\MessageBuilder\VideoMessageBuilder;
 use \LINE\LINEBot\SignatureValidator as SignatureValidator;
-use PhpParser\Node\Stmt\Foreach_;
+use Illuminate\Support\Str;
 
 class LineBotController extends Controller
 {
@@ -52,12 +52,12 @@ class LineBotController extends Controller
         $data = json_decode($body, true);
         foreach ($data['events'] as $event) {
             $userMessage = $event['message']['text'];
-            if (strtolower($userMessage) == 'halo') {
+            if (strtolower(Str::of($userMessage)->trim()) == 'halo') {
                 $message = "Halo juga";
                 $textMessageBuilder = new TextMessageBuilder($message);
                 $result = $bot->replyMessage($event['replyToken'], $textMessageBuilder);
                 return $result->getHTTPStatus() . ' ' . $result->getRawBody();
-            } else if (strtolower($userMessage) == 'indonesia') {
+            } else if (strtolower(Str::of($userMessage)->trim()) == 'indonesia') {
                 $textMessageBuilder = new TextMessageBuilder($this->dataCovidService->index());
                 $result = $bot->replyMessage($event['replyToken'], $textMessageBuilder);
                 return $result->getHTTPStatus() . ' ' . $result->getRawBody();
